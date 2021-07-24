@@ -28,6 +28,7 @@ public class Item {
     }
 
     public void setPrice(String newValue) {
+        //Ensure price is in format $xxxxx.xx
         if(Pattern.matches("^\\$(\\d{1,3}(\\,\\d{3})*|(\\d+))(\\.\\d{2})?$", newValue)) {
             price.set(newValue);
         }else {
@@ -51,7 +52,7 @@ public class Item {
                 ListSerialNumbers.add(serial);
             }
         }else{
-            serialNumber.set("Alpha-numeric Only");
+            serialNumber.set("Alpha-Numeric Only");
         }
     }
 
@@ -76,7 +77,8 @@ public class Item {
         if (obj == this) return true;
         if (!(obj instanceof Item)) return false;
         Item other = (Item)obj;
-        if(this.price.get().equals(other.price.get()) && this.productName.get().equals(other.productName.get()) && this.serialNumber.get().equals(other.serialNumber.get())){
+        if(this.price.get().equals(other.price.get()) && this.productName.get().equals(other.productName.get())
+                && this.serialNumber.get().equals(other.serialNumber.get())){
             return true;
         }else{
             return false;

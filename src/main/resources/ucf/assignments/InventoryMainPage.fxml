@@ -22,7 +22,7 @@
                         <PropertyValueFactory property="price" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="productColumn" minWidth="0.0" prefWidth="315.99998474121094" text="Product">
+                <TableColumn fx:id="productColumn" minWidth="0.0" prefWidth="315.99998474121094" text="Product Name">
                     <cellValueFactory>
                         <PropertyValueFactory property="productName" />
                     </cellValueFactory>

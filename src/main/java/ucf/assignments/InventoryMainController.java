@@ -38,6 +38,7 @@ public class InventoryMainController implements Initializable {
     @FXML private TextField productTextField;
     @FXML private TextField searchField;
     private final ObservableList<Item> itemList = FXCollections.observableArrayList();
+
     @FXML
     public void addItemButton(javafx.event.ActionEvent actionEvent){
         //cut description field to 256 characters
@@ -78,33 +79,47 @@ public class InventoryMainController implements Initializable {
                 //get file name and extension
                 String fileName = file.getName();
                 String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
-                //use extension to call correct FileHandler method
-                tableView.getItems().clear();
+
+
+                //use file extension to call correct FileHandler method
                 if(fileExtension.toLowerCase(Locale.ROOT).equals("tsv")){
                     LinkedList<Item> loadedList = FileHandler.loadTSV(file);
-                    //add loadedList to tableView one by one.
+                    //clear old list
+                    tableView.getItems().clear();
+                    //load new list
                     itemList.addAll(loadedList);
+
                 }else if(fileExtension.toLowerCase(Locale.ROOT).equals("html")){
                     LinkedList<Item> loadedList = FileHandler.loadHTML(file);
+                    //clear old list
+                    tableView.getItems().clear();
+                    //load new list
                     itemList.addAll(loadedList);
+
                 }else if(fileExtension.toLowerCase(Locale.ROOT).equals("json")){
-                    ObservableList<Item> loadList = tableView.getItems();
-                    loadList.clear();
-                    //get List from loadJSON and add all to observable list
-                    loadList.addAll(FileHandler.loadJSON(fileName));
+                    LinkedList<Item> loadedList = FileHandler.loadJSON(fileName);
+                    //clear old list
+                    tableView.getItems().clear();
+                    //load new list
+                    itemList.addAll(loadedList);
                 }
         }
     }
 
     @FXML
     public void saveInventoryListClick(ActionEvent actionEvent) {
+        //open file chooser, configure it, get file from user.
         FileChooser fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
         Stage thisStage = (Stage) anchorPane.getScene().getWindow();
         File file = fileChooser.showSaveDialog(thisStage);
+        //pass user selected file to save function
         saveInventoryList(file);
     }
     public void saveInventoryList(File file){
+        //get file name
+        //get file extension
+        //pass file and working list to correct FileHandler function.
         if (file != null) {
             String fileName = file.getName();
             String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
@@ -132,7 +147,7 @@ public class InventoryMainController implements Initializable {
         @Override
         public void initialize(URL location, ResourceBundle resources){
 
-            //make each column editable
+            //make price column editable
             priceColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             priceColumn.setOnEditCommit(
                     new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
@@ -145,6 +160,7 @@ public class InventoryMainController implements Initializable {
                         }
                     }
             );
+            //make serial number column editable
             serialColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             serialColumn.setOnEditCommit(
                     new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
@@ -157,6 +173,7 @@ public class InventoryMainController implements Initializable {
                         }
                     }
             );
+            //make product name column editable
             productColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             productColumn.setOnEditCommit(
                     new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
@@ -168,11 +185,12 @@ public class InventoryMainController implements Initializable {
                         }
                     }
             );
+
             // Create Search Listener
             //first wrap itemList in filtered List
             FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
 
-            // 2. Set the filter whenever the filter changes.
+            // Set the filter whenever the filter changes.
             searchField.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredData.setPredicate(product -> {
                     // If filter text is empty, display all persons.

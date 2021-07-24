@@ -65,13 +65,17 @@ public class FileHandler {
     }
 
     public static LinkedList<Item> loadTSV(File file) {
+        //Reads in tsv file, every element of data is a whole line from file
         LinkedList<String> data = readLines(file);
+        //String[] will hold 3 values, the price, product name, serial number
         String[] paramsFromLine;
+        //items is list to be returned to main controller
         LinkedList<Item> items = new LinkedList<>();
         try {
             for (int i = 0; i < data.size(); i++) {
                 //turn each line into tab separated values
                 paramsFromLine = data.get(i).split("\t");
+                //pass String[] paramsFromLine to items List
                 Item loadedItem = new Item(paramsFromLine[0], paramsFromLine[1], paramsFromLine[2]);
                 items.add(loadedItem);
             }
@@ -83,10 +87,15 @@ public class FileHandler {
     }
 
     public static LinkedList<Item> loadHTML(File file) {
+        //read every line from file into an element in data
         LinkedList<String> data = readLines(file);
+        //items is list to be returned to main controller
         LinkedList<Item> items = new LinkedList<>();
             try {
+                //initiate i at 5 to skip header
+                //set i parameters to skip from product price to proceeding product price, hence i+=5
                 for (int i = 5; i < data.size() - 4; i+=5) {
+                    // data was stored in same order, price, productname, serial number.
                     String price = StringUtils.substringBetween(data.get(i), "<th>", "</th>");
                     String productname = StringUtils.substringBetween(data.get(i + 1), "<th>", "</th>");
                     String serialnumber = StringUtils.substringBetween(data.get(i + 2), "<th>", "</th>");
@@ -118,6 +127,7 @@ public class FileHandler {
 
     }
     public static LinkedList<String> readLines(File file){
+        //hold every line from file as an element in data
         LinkedList<String> data = new LinkedList<>();
         try {
             //initialize file object
