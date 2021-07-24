@@ -48,7 +48,7 @@ public class InventoryMainController implements Initializable {
             newName = productTextField.getText();
         }
         //initialize new object Item
-        tableView.getItems().add(new Item(priceTextField.getText(), newName, serialTextField.getText()));
+        itemList.add(new Item(priceTextField.getText(), newName, serialTextField.getText()));
 
     }
 
@@ -185,12 +185,12 @@ public class InventoryMainController implements Initializable {
                     String lowerCaseFilter = newValue.toLowerCase();
 
                     if (product.priceProperty().get().toLowerCase().contains(lowerCaseFilter)) {
-                        return true; // Filter matches first name.
+                        return true; // Search matches price.
                     } else if (product.productNameProperty().get().toLowerCase().contains(lowerCaseFilter)) {
-                        return true; // Filter matches last name.
+                        return true; // Search matches product name.
                     }
                     else if (product.serialNumberProperty().get().contains(lowerCaseFilter))
-                        return true;
+                        return true; // Search matches serial number
                     else
                         return false; // Does not match.
                 });

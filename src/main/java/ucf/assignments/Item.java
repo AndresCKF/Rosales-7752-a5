@@ -8,6 +8,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.LinkedList;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -15,6 +16,8 @@ public class Item {
     private final SimpleStringProperty price = new SimpleStringProperty("");
     private final SimpleStringProperty productName = new SimpleStringProperty("");
     private final SimpleStringProperty serialNumber = new SimpleStringProperty("");
+
+    private static final LinkedList<String> ListSerialNumbers = new LinkedList<String>();
     public Item(){
         this("","","");
     }
@@ -33,8 +36,20 @@ public class Item {
     }
 
     public void setSerialNumber(String serial) {
+        //make sure serial number is only letters and numbers
         if(Pattern.matches("^[a-zA-Z0-9]+$", serial)) {
-            serialNumber.set(serial);
+            //make sure new serial number doesn't already exist
+            if(ListSerialNumbers.isEmpty()){
+                serialNumber.set(serial);
+                ListSerialNumbers.add(serial);
+            }
+            else if(ListSerialNumbers.contains(serial)) {
+                serialNumber.set("Duplicates not allowed");
+            }else{
+                //if  ListSerialNumbers doesnt contain the new serial number, set serial and add it to List
+                serialNumber.set(serial);
+                ListSerialNumbers.add(serial);
+            }
         }else{
             serialNumber.set("Alpha-numeric Only");
         }
