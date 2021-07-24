@@ -1,3 +1,7 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 andres rosales
+ */
 package ucf.assignments;
 
 import com.google.gson.Gson;
@@ -60,19 +64,27 @@ public class FileHandler {
         }
     }
 
-    public static void loadTSV(ObservableList<Item> items, File file) throws IOException {
+    public static LinkedList<Item> loadTSV(File file) {
         LinkedList<String> data = readLines(file);
         String[] paramsFromLine;
-        for(int i=0; i<data.size();i++){
-            //turn each line into tab separated values
-            paramsFromLine = data.get(i).split("\t");
-            Item loadedItem = new Item( paramsFromLine[0], paramsFromLine[1], paramsFromLine[2]);
-            items.add(loadedItem);
+        LinkedList<Item> items = new LinkedList<>();
+        try {
+            for (int i = 0; i < data.size(); i++) {
+                //turn each line into tab separated values
+                paramsFromLine = data.get(i).split("\t");
+                Item loadedItem = new Item(paramsFromLine[0], paramsFromLine[1], paramsFromLine[2]);
+                items.add(loadedItem);
+            }
+            return items;
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return items;
         }
     }
 
-    public static void loadHTML(ObservableList<Item> items, File file) {
+    public static LinkedList<Item> loadHTML(File file) {
         LinkedList<String> data = readLines(file);
+        LinkedList<Item> items = new LinkedList<>();
             try {
                 for (int i = 5; i < data.size() - 4; i+=5) {
                     String price = StringUtils.substringBetween(data.get(i), "<th>", "</th>");
@@ -80,12 +92,14 @@ public class FileHandler {
                     String serialnumber = StringUtils.substringBetween(data.get(i + 2), "<th>", "</th>");
                     items.add(new Item(price, productname, serialnumber));
                 }
+                return items;
             }catch (Exception ex) {
                 ex.printStackTrace();
+                return items;
         }
     }
-    public static List<Item> loadJSON(String file) {
-        List<Item> loadItems = new ArrayList<>();
+    public static LinkedList<Item> loadJSON(String file) {
+        LinkedList<Item> loadItems = new LinkedList<>();
         try {
             Type listOfItemObject = new TypeToken<ArrayList<Item>>() {}.getType();
             // create Gson instance

@@ -1,7 +1,14 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 andres rosales
+ */
 package ucf.assignments;
 
 import com.sun.javafx.scene.control.DoubleField;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,11 +36,10 @@ public class InventoryMainController implements Initializable {
     @FXML private TextField priceTextField;
     @FXML private TextField serialTextField;
     @FXML private TextField productTextField;
-
-
+    @FXML private TextField searchField;
+    private final ObservableList<Item> itemList = FXCollections.observableArrayList();
     @FXML
     public void addItemButton(javafx.event.ActionEvent actionEvent){
-
         //cut description field to 256 characters
         String newName;
         if(productTextField.getText().length() > 256) {
@@ -42,15 +48,8 @@ public class InventoryMainController implements Initializable {
             newName = productTextField.getText();
         }
         //initialize new object Item
-        Item newItem = new Item(priceTextField.getText(), newName, serialTextField.getText());
-        addItem(newItem);
-    }
+        tableView.getItems().add(new Item(priceTextField.getText(), newName, serialTextField.getText()));
 
-    public void addItem(Item newItem) {
-        //init observable list from tableview
-        ObservableList<Item> inventoryList = tableView.getItems();
-        //add new Item to List
-        inventoryList.add(newItem);
     }
 
     @FXML
@@ -76,26 +75,24 @@ public class InventoryMainController implements Initializable {
 
     private void loadInventoryList(File file) {
         if (file != null) {
-            try {
                 //get file name and extension
                 String fileName = file.getName();
                 String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
                 //use extension to call correct FileHandler method
+                tableView.getItems().clear();
                 if(fileExtension.toLowerCase(Locale.ROOT).equals("tsv")){
-                    FileHandler.loadTSV(tableView.getItems(), file);
+                    LinkedList<Item> loadedList = FileHandler.loadTSV(file);
+                    //add loadedList to tableView one by one.
+                    itemList.addAll(loadedList);
                 }else if(fileExtension.toLowerCase(Locale.ROOT).equals("html")){
-                    FileHandler.loadHTML(tableView.getItems(), file);
+                    LinkedList<Item> loadedList = FileHandler.loadHTML(file);
+                    itemList.addAll(loadedList);
                 }else if(fileExtension.toLowerCase(Locale.ROOT).equals("json")){
                     ObservableList<Item> loadList = tableView.getItems();
                     loadList.clear();
                     //get List from loadJSON and add all to observable list
                     loadList.addAll(FileHandler.loadJSON(fileName));
-
-
                 }
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage() + "\n Error loading file");
-            }
         }
     }
 
@@ -134,8 +131,6 @@ public class InventoryMainController implements Initializable {
     }
         @Override
         public void initialize(URL location, ResourceBundle resources){
-            //initialize list
-            ObservableList<Item> inventoryList = tableView.getItems();
 
             //make each column editable
             priceColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -173,5 +168,42 @@ public class InventoryMainController implements Initializable {
                         }
                     }
             );
+            // Create Search Listener
+            //first wrap itemList in filtered List
+            FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
+
+            // 2. Set the filter whenever the filter changes.
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredData.setPredicate(product -> {
+                    // If filter text is empty, display all persons.
+
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+
+                    // Compare price, productname, serialnumber, with filter text.
+                    String lowerCaseFilter = newValue.toLowerCase();
+
+                    if (product.priceProperty().get().toLowerCase().contains(lowerCaseFilter)) {
+                        return true; // Filter matches first name.
+                    } else if (product.productNameProperty().get().toLowerCase().contains(lowerCaseFilter)) {
+                        return true; // Filter matches last name.
+                    }
+                    else if (product.serialNumberProperty().get().contains(lowerCaseFilter))
+                        return true;
+                    else
+                        return false; // Does not match.
+                });
+            });
+
+            // Wrap the FilteredList in a SortedList.
+            SortedList<Item> sortedData = new SortedList<>(filteredData);
+
+            // Bind the SortedList comparator to the TableView comparator.
+            sortedData.comparatorProperty().bind(tableView.comparatorProperty());
+
+            // 5. Add sorted (and filtered) data to the table.
+            tableView.setItems(sortedData);
+            //End Search Listener
         }
 }
