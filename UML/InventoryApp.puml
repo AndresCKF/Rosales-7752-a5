@@ -1,0 +1,46 @@
+@startuml
+class InventoryApp{
+    main()
+    start()
+}
+class FileHandler{
+    +createFile()
+
+    +saveTSV()
+    +saveHTML()
+
+    +loadTSV()
+    +loadHTML()
+}
+class InventoryMainController{
+    +initialize()
+
+    +configureFileChooser()
+    +saveInventoryListClick()
+    +saveInventoryList()
+    +loadListClick()
+    +loadList()
+
+    +deleteClicked
+    +deleteListItem
+
+
+}
+class Item{
+    +SimpleStringProperty price
+    +SimpleStringProperty name
+    +SimpleStringProperty serialNumber
+
+    +priceProperty()
+    +productNameProperty()
+    +serialNumberProperty()
+
+    +setPrice()
+    +setSerialNumber()
+    +setProductName()
+}
+InventoryApp -- InventoryMainController
+InventoryMainController -- FileHandler
+InventoryMainController -- Item
+FileHandler -- Item
+@enduml
