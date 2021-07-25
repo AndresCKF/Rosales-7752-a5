@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class FileHandler {
-    public final static String header = "<!DOCTYPE html>\n<html>\n<body>\n<table>\n";
+    public final static String header = "<!DOCTYPE html>\n<html>\n<body>\n<table style=\"width: 100%\">\n" +
+            "\t<tr>\n\t\t<th>Price</th>\n\t\t<th>Product Name</th>\n\t\t<th>Serial Number</th>\n\t</tr>\n";
     public final static String footer = "</table>\n</body>\n</html>\n";
 
     public static void saveJSON(List<Item> items, File file) {
@@ -122,7 +123,7 @@ public class FileHandler {
             try {
                 //initiate i at 5 to skip header
                 //set i parameters to skip from product price to proceeding product price, hence i+=5
-                for (int i = 5; i < data.size() - 4; i+=5) {
+                for (int i = 10; i < data.size() - 4; i+=5) {
                     // data was stored in same order, price, productname, serial number.
                     String price = StringUtils.substringBetween(data.get(i), "<th>", "</th>");
                     String productname = StringUtils.substringBetween(data.get(i + 1), "<th>", "</th>");
