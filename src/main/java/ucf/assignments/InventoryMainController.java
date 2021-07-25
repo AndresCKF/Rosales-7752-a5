@@ -30,7 +30,7 @@ import java.util.*;
 
 public class InventoryMainController implements Initializable {
     @FXML
-    private TableView<Item> tableView;
+    public TableView<Item> tableView;
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -47,7 +47,7 @@ public class InventoryMainController implements Initializable {
     private TextField productTextField;
     @FXML
     private TextField searchField;
-    private final ObservableList<Item> itemList = FXCollections.observableArrayList();
+    public final ObservableList<Item> itemList = FXCollections.observableArrayList();
     private final LinkedList<String> serialList = new LinkedList<>();
     @FXML
     public void addItemButton(javafx.event.ActionEvent actionEvent) {
@@ -61,9 +61,14 @@ public class InventoryMainController implements Initializable {
         //check serialnumber against list
         String newSerial = checkSerialDuplicate(serialTextField.getText());
         //initialize new object Item
-        itemList.add(new Item(priceTextField.getText(), newName, newSerial));
-        tableView.setItems(itemList);
+        addItem(new Item(priceTextField.getText(), newName, newSerial));
     }
+    public void addItem(Item newitem){
+        itemList.add(newitem);
+        tableView.setItems(itemList);
+
+    }
+
     //checks input string against serialList
     public String checkSerialDuplicate(String text) {
         //if list empty add new serial number
@@ -83,11 +88,12 @@ public class InventoryMainController implements Initializable {
 
     @FXML
     public void deleteClicked(ActionEvent event) {
-        deleteListItem();
+        deleteListItem(tableView.getSelectionModel().getSelectedItem());
     }
 
-    private void deleteListItem() {
-        tableView.getItems().removeAll(tableView.getSelectionModel().getSelectedItem());
+    public void deleteListItem(Item selectedItem) {
+        itemList.remove(selectedItem);
+        tableView.setItems(itemList);
     }
 
     @FXML

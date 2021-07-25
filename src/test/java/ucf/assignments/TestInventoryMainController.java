@@ -27,15 +27,18 @@ import ucf.assignments.InventoryMainController;
  *  UCF COP3330 Summer 2021 Assignment 5 Solution
  *  Copyright 2021 andres rosales
  */
-public class TestInventoryMainController implements Initializable {
-    @FXML TextField searchField;
+public class TestInventoryMainController {
+    /*@FXML TextField searchField;
+    @FXML
+    public TableView<Item> tableView;
+    public final ObservableList<Item> itemList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     searchField.setText("Andres");
     System.out.println(searchField.getText());
     }
-
+*/
     @Test//adds 100 items then saves to html, open in app to see it can display all 100 items correctly.
     public void add100Items(){
         LinkedList<Item> inventoryList = new LinkedList<Item>();
@@ -51,7 +54,7 @@ public class TestInventoryMainController implements Initializable {
     }
 
     @Test
-    public void testMakeFilteredList(){
+    public void testSearchByName(){
         //create new item list with 4 items
         ObservableList<Item> itemList = FXCollections.observableArrayList();
         itemList.add(new Item("$33.44","Andres","sdfsttr3443434"));
@@ -67,7 +70,24 @@ public class TestInventoryMainController implements Initializable {
         expected.add(new Item("$33.44","Andres","sdfsttr3443434"));
 
         assertIterableEquals(sortedList, expected);
-        assertEquals(sortedList.size(), 1);
+    }
+    @Test
+    public void testSearchBySerial(){
+        //create new item list with 4 items
+        ObservableList<Item> itemList = FXCollections.observableArrayList();
+        itemList.add(new Item("$33.44","Andres","sdfsttr3443434"));
+        itemList.add(new Item("$33.44","Bob","sdfsdfaw3434"));
+        itemList.add(new Item("$33.44","Charlie","sdfsdfjjjj434"));
+        itemList.add(new Item("$33.44","Dick","sdfggg43434"));
+        //make new filtered list with search term Andres
+        FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
+        SortedList<Item> sortedList = InventoryMainController.makeFilteredList(filteredData, "sdfggg43434");
+        //should return sortedlist with single item
+        //create singleton list with expected item
+        ArrayList<Item> expected = new ArrayList<>();
+        expected.add(new Item("$33.44","Dick","sdfggg43434"));
+
+        assertIterableEquals(sortedList, expected);
     }
     @Test
     public void testFalseMakeFilteredList(){
@@ -82,4 +102,24 @@ public class TestInventoryMainController implements Initializable {
         //new sorted list should not contain 2 items
         assertNotEquals(sortedList.size(), 2);
     }
+
+    @Test
+    public void testDuplicateSerial(){
+        InventoryMainController controller = new InventoryMainController();
+        String expected = "Duplicate";
+        String Serial1 = "XXX";
+        String Serial2 = "XXX";
+        String newSerial1 =  controller.checkSerialDuplicate(Serial1);
+        String newSerial2 = controller.checkSerialDuplicate(Serial2);
+        assertEquals(newSerial2, expected);
+    }
+
+    /*@Test
+    public void testDeleteListItem(){
+        InventoryMainController controller = new InventoryMainController();
+        Item newItem = new Item("$44", "xbox controller", "abcd123");
+        controller.addItem(newItem);
+        controller.deleteListItem(newItem);
+        assert(controller.itemList.isEmpty());
+    }*/
 }

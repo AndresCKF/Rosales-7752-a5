@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileHandlerTest {
-    @Test
+    @Test//2 tests in one, tests save and load
     public void testLoadAndSaveTSV(){
         //unchanged list to be tested against.
         LinkedList<Item> fixed = new LinkedList<>();
@@ -22,7 +22,7 @@ class FileHandlerTest {
         LinkedList<Item> loadedList = FileHandler.loadTSV(file);
         assertIterableEquals(fixed, loadedList);
     }
-    @Test
+    @Test //2 tests in one, tests save and load
     public void testLoadAndSaveHTML(){
         //unchanged list to be tested against.
         LinkedList<Item> fixed = new LinkedList<>();
@@ -38,7 +38,7 @@ class FileHandlerTest {
         assertIterableEquals(fixed, loadedList);
     }
 
-    @Test
+    @Test //2 tests in one, tests save and load
     public void testLoadAndSaveJSON(){
         //unchanged list to be tested against.
         LinkedList<Item> fixed = new LinkedList<>();

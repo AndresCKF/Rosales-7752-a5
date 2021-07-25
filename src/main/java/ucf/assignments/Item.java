@@ -75,11 +75,11 @@ public class Item {
     public int hashCode() {
         return Objects.hash(this.price, this.productName, this.serialNumber);
     }
-    @Override
+    /*@Override
     public String toString() {
         return "Price='" + price + '\'' +
                 "Product Name='" + productName + '\'' +
                 "Serial Number='" + serialNumber + '\'' +
                 '}';
-    }
+    }*/
 }
