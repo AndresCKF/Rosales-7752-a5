@@ -14,13 +14,15 @@ class FileHandler{
     +loadJSON()
 
     +readLines()
+    +convertObserv2JSON()
+    +readJson()
 }
 class InventoryMainController{
     +initialize()
 
     +addItem()
-    +deleteClicked
-    +deleteListItem
+    +deleteClicked()
+    +deleteListItem()
 
     +configureFileChooser()
 
@@ -29,7 +31,7 @@ class InventoryMainController{
 
     +loadListClick()
     +loadList()
-    +makeFilteredList
+    +makeFilteredList()
 
 }
 class Item{
@@ -50,8 +52,14 @@ class Item{
     +hashcode()     @Override
 
 }
+class jsonItem{
+    +String price
+    +String productName
+    +String serialNumber
+}
 InventoryApp -- InventoryMainController
 InventoryMainController -- FileHandler
 InventoryMainController -- Item
 FileHandler -- Item
+FileHandler -- jsonItem
 @enduml

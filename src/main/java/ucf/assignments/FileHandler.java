@@ -21,13 +21,12 @@ public class FileHandler {
     public final static String footer = "</table>\n</body>\n</html>\n";
 
     public static void saveJSON(ObservableList<Item> items, File file) {
-        System.out.println(items.size());
         //convert observable list into a list of jsonItems that GSON can read
         LinkedList<jsonItem> saveList = convertObserv2JSON(items);
-        System.out.println(saveList.size());
+        //get GSON string
         Gson gson = new Gson();
         String jsonString = gson.toJson(saveList);
-        System.out.println(jsonString);
+        //save string to file
         try (FileWriter jsonWriter = new FileWriter(file)){
             jsonWriter.write(jsonString);
         }catch (IOException ex){
@@ -44,6 +43,7 @@ public class FileHandler {
             jsonItem temp = new jsonItem(items.get(i).priceProperty().get(),
                     items.get(i).productNameProperty().get(),
                     items.get(i).serialNumberProperty().get());
+            //add jsonItem holder to returnList
             returnList.add(temp);
         }
         return returnList;
@@ -155,7 +155,7 @@ public class FileHandler {
         try {
             // create Gson instance
             Gson gson = new Gson();
-            // create a reader
+            // create a reader, read into loadItems list
             Reader reader = Files.newBufferedReader(Paths.get(filePath));
             Type listOfObj = new TypeToken<LinkedList<jsonItem>>() {}.getType();
             loadItems = new Gson().fromJson(reader, listOfObj);
