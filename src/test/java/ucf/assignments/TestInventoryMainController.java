@@ -52,7 +52,20 @@ public class TestInventoryMainController implements Initializable {
 
     @Test
     public void testMakeFilteredList(){
-        //InventoryMainController controller = new InventoryMainController();
+        //create new item list with 4 items
+        ObservableList<Item> itemList = FXCollections.observableArrayList();
+        itemList.add(new Item("$33.44","Andres","sdfsttr3443434"));
+        itemList.add(new Item("$33.44","Bob","sdfsdfaw3434"));
+        itemList.add(new Item("$33.44","Charlie","sdfsdfjjjj434"));
+        itemList.add(new Item("$33.44","Dick","sdfggg43434"));
+        //make new filtered list with search term Andres
+        FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
+        SortedList<Item> sortedList = InventoryMainController.makeFilteredList(filteredData, "Andres");
+        //should return sortedlist with single item, Andres
+        assertEquals(sortedList.size(), 1);
+    }
+    @Test
+    public void testFalseMakeFilteredList(){
         ObservableList<Item> itemList = FXCollections.observableArrayList();
         itemList.add(new Item("$33.44","Andres","sdfsttr3443434"));
         itemList.add(new Item("$33.44","Bob","sdfsdfaw3434"));
@@ -61,6 +74,7 @@ public class TestInventoryMainController implements Initializable {
 
         FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
         SortedList<Item> sortedList = InventoryMainController.makeFilteredList(filteredData, "Andres");
-        assertEquals(sortedList.size(), 1);
+        //new sorted list should not contain 2 items
+        assertNotEquals(sortedList.size(), 2);
     }
 }
