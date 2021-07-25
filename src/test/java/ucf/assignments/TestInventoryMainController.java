@@ -62,6 +62,11 @@ public class TestInventoryMainController implements Initializable {
         FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
         SortedList<Item> sortedList = InventoryMainController.makeFilteredList(filteredData, "Andres");
         //should return sortedlist with single item, Andres
+        //create singleton list with expected item
+        ArrayList<Item> expected = new ArrayList<>();
+        expected.add(new Item("$33.44","Andres","sdfsttr3443434"));
+
+        assertIterableEquals(sortedList, expected);
         assertEquals(sortedList.size(), 1);
     }
     @Test

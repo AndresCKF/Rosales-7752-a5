@@ -20,7 +20,7 @@ public class FileHandler {
     public final static String header = "<!DOCTYPE html>\n<html>\n<body>\n<table>\n";
     public final static String footer = "</table>\n</body>\n</html>\n";
 
-    public static void saveJSON(ObservableList<Item> items, File file) {
+    public static void saveJSON(List<Item> items, File file) {
         //convert observable list into a list of jsonItems that GSON can read
         LinkedList<jsonItem> saveList = convertObserv2JSON(items);
         //get GSON string
@@ -36,7 +36,7 @@ public class FileHandler {
 
     }
 
-    private static LinkedList<jsonItem> convertObserv2JSON(ObservableList<Item> items) {
+    private static LinkedList<jsonItem> convertObserv2JSON(List<Item> items) {
         LinkedList<jsonItem> returnList = new LinkedList<>();
         for(int i=0; i< items.size(); i++){
             //interim jsonItem holder

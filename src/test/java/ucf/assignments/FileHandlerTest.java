@@ -38,4 +38,20 @@ class FileHandlerTest {
         assertIterableEquals(fixed, loadedList);
     }
 
+    @Test
+    public void testLoadAndSaveJSON(){
+        //unchanged list to be tested against.
+        LinkedList<Item> fixed = new LinkedList<>();
+        //initialize file to save to then read from.
+        File file = new File("./src/test/resources/testLoadAndSaveJSON.json");
+
+        fixed.add(new Item("$255.50", "XBOX controller","vffgfgfg34"));
+        fixed.add(new Item("$32435.50", "XBOX 1","dddddddddddddddd"));
+        fixed.add(new Item("$253350", "Gaming Laptop","dfsdfsd3434543fdgfdg"));
+
+        FileHandler.saveJSON(fixed,file);
+        LinkedList<Item> loadedList = FileHandler.loadJSON(file.getAbsolutePath());
+        assertIterableEquals(fixed, loadedList);
+    }
+
 }

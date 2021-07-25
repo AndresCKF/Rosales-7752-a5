@@ -14,6 +14,7 @@ Welcome to Inventory Manager!
        b)click Edit in menu bar
        c)click delete
     3. To edit a particular field of a particular Product.
+    (Attempting to use existing serial number will change it's value to duplicate)
        a) click on the cell
        b) type in new value
        c) hit Enter

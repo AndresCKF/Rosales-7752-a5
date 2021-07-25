@@ -48,7 +48,7 @@ public class InventoryMainController implements Initializable {
     @FXML
     private TextField searchField;
     private final ObservableList<Item> itemList = FXCollections.observableArrayList();
-
+    private final LinkedList<String> serialList = new LinkedList<>();
     @FXML
     public void addItemButton(javafx.event.ActionEvent actionEvent) {
         //cut description field to 256 characters
@@ -58,9 +58,27 @@ public class InventoryMainController implements Initializable {
         } else {
             newName = productTextField.getText();
         }
+        //check serialnumber against list
+        String newSerial = checkSerialDuplicate(serialTextField.getText());
         //initialize new object Item
-        itemList.add(new Item(priceTextField.getText(), newName, serialTextField.getText()));
+        itemList.add(new Item(priceTextField.getText(), newName, newSerial));
         tableView.setItems(itemList);
+    }
+    //checks input string against serialList
+    public String checkSerialDuplicate(String text) {
+        //if list empty add new serial number
+        if(serialList.isEmpty()){
+            serialList.add(text);
+            return text;
+        }
+        //if serialist contains text set serial to Duplicate
+        else if(serialList.contains(text)) {
+            return "Duplicate";
+        }else{
+            //if  ListSerialNumbers doesnt contain the new serial number, return serial and add it to List
+            serialList.add(text);
+            return text;
+        }
     }
 
     @FXML
@@ -184,7 +202,7 @@ public class InventoryMainController implements Initializable {
                     public void handle(TableColumn.CellEditEvent<Item, String> event) {
                         ((Item) event.getTableView().getItems().get(
                                 event.getTablePosition().getRow())
-                        ).setSerialNumber(event.getNewValue());
+                        ).setSerialNumber(checkSerialDuplicate(event.getNewValue()));
                         tableView.refresh();
                     }
                 }

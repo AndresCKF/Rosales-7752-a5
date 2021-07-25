@@ -18,6 +18,8 @@ class FileHandler{
     +readJson()
 }
 class InventoryMainController{
+    -LinkedList<String> serialList
+
     +initialize()
 
     +addItem()
@@ -31,14 +33,14 @@ class InventoryMainController{
 
     +loadListClick()
     +loadList()
-    +makeFilteredList()
 
+    +makeFilteredList()
+    +checkSerialDuplicate()
 }
 class Item{
     -SimpleStringProperty price
     -SimpleStringProperty name
     -SimpleStringProperty serialNumber
-    -LinkedList<String> listSerialNumbers
 
     +priceProperty()
     +productNameProperty()
@@ -48,9 +50,9 @@ class Item{
     +setSerialNumber()
     +setProductName()
 
-    +equals()    @Override
-    +hashcode()     @Override
-
+    +equals()
+    +hashcode()
+    +toString()
 }
 class jsonItem{
     +String price

@@ -17,7 +17,6 @@ public class Item {
     private final SimpleStringProperty productName = new SimpleStringProperty("");
     private final SimpleStringProperty serialNumber = new SimpleStringProperty("");
 
-    private static final LinkedList<String> ListSerialNumbers = new LinkedList<>();
     public Item(){
         this("","","");
     }
@@ -39,18 +38,7 @@ public class Item {
     public void setSerialNumber(String serial) {
         //make sure serial number is only letters and numbers
         if(Pattern.matches("^[a-zA-Z0-9]+$", serial)) {
-            //make sure new serial number doesn't already exist
-            if(ListSerialNumbers.isEmpty()){
-                serialNumber.set(serial);
-                ListSerialNumbers.add(serial);
-            }
-            else if(ListSerialNumbers.contains(serial)) {
-                serialNumber.set("Duplicates not allowed");
-            }else{
-                //if  ListSerialNumbers doesnt contain the new serial number, set serial and add it to List
-                serialNumber.set(serial);
-                ListSerialNumbers.add(serial);
-            }
+            serialNumber.set(serial);
         }else{
             serialNumber.set("Alpha-Numeric Only");
         }
@@ -75,8 +63,7 @@ public class Item {
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
-        if (!(obj instanceof Item)) return false;
-        Item other = (Item)obj;
+        if (!(obj instanceof Item other)) return false;
         if(this.price.get().equals(other.price.get()) && this.productName.get().equals(other.productName.get())
                 && this.serialNumber.get().equals(other.serialNumber.get())){
             return true;
@@ -86,6 +73,13 @@ public class Item {
     }
     @Override
     public int hashCode() {
-        return Objects.hash(price, productName, serialNumber);
+        return Objects.hash(this.price, this.productName, this.serialNumber);
+    }
+    @Override
+    public String toString() {
+        return "Price='" + price + '\'' +
+                "Product Name='" + productName + '\'' +
+                "Serial Number='" + serialNumber + '\'' +
+                '}';
     }
 }
