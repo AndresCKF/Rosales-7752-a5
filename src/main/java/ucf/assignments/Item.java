@@ -45,7 +45,11 @@ public class Item {
     }
 
     public void setProductName(String name) {
-        productName.set(name);
+        if(2 <= name.length() && name.length() <= 256) {
+            productName.set(name);
+        }else{
+            productName.set("Must be between 2 and 256");
+        }
     }
     public SimpleStringProperty priceProperty(){
 
