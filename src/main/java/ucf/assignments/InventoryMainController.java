@@ -72,8 +72,12 @@ public class InventoryMainController implements Initializable {
 
     //checks input string against serialList
     public String checkSerialDuplicate(String text) {
+        //ensure AlphaNumeric Only isn't added to serialList.
+        if (text.equals("AlphaNumeric Only") || text.equals("Serial is 10 Characters")){
+            return text;
+        }
         //if list empty add new serial number
-        if(serialList.isEmpty()){
+        else if(serialList.isEmpty()){
             serialList.add(text);
             return text;
         }

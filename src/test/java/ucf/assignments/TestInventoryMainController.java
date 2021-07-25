@@ -35,7 +35,7 @@ public class TestInventoryMainController {
         InventoryMainController controller = new InventoryMainController();
 
         for(int i=0; i<100; i++){
-            controller.addItem(new Item("$" + i,"Chrysler SUV", "AsdfdsfASa334" + i));
+            controller.addItem(new Item("$" + i,"Chrysler SUV", "AsdfdsfAS" + i));
         }
         assert(controller.itemList.size() == 100);
         //outputs 100 item list to check how it looks when opened in app
@@ -77,17 +77,17 @@ public class TestInventoryMainController {
     public void testSearchBySerial(){
         //create new item list with 4 items
         ObservableList<Item> itemList = FXCollections.observableArrayList();
-        itemList.add(new Item("$33.44","Andres","sdfsttr3443434"));
-        itemList.add(new Item("$33.44","Bob","sdfsdfaw3434"));
-        itemList.add(new Item("$33.44","Charlie","sdfsdfjjjj434"));
-        itemList.add(new Item("$33.44","Dick","sdfggg43434"));
+        itemList.add(new Item("$33.44","Andres","sdfsttr3443"));
+        itemList.add(new Item("$33.44","Bob","sdfsdfaw34"));
+        itemList.add(new Item("$33.44","Charlie","sdferwjj434"));
+        itemList.add(new Item("$33.44","Dick","sdfggg4334"));
         //make new filtered list with search term Andres
         FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
-        SortedList<Item> sortedList = InventoryMainController.makeFilteredList(filteredData, "sdfggg43434");
+        SortedList<Item> sortedList = InventoryMainController.makeFilteredList(filteredData, "sdfggg4334");
         //should return sortedlist with single item
         //create singleton list with expected item
         ArrayList<Item> expected = new ArrayList<>();
-        expected.add(new Item("$33.44","Dick","sdfggg43434"));
+        expected.add(new Item("$33.44","Dick","sdfggg4334"));
 
         assertIterableEquals(sortedList, expected);
     }

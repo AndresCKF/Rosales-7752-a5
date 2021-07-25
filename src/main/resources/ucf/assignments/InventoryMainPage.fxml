@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -9,25 +10,26 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.effect.SepiaTone?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="582.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.InventoryMainController">
+<AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.InventoryMainController">
    <children>
-      <ScrollPane layoutX="-1.0" layoutY="78.0" prefHeight="416.0" prefWidth="602.0">
+      <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="-1.0" layoutY="78.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
          <content>
-            <TableView fx:id="tableView" editable="true" prefHeight="412.0" prefWidth="600.0">
+            <TableView fx:id="tableView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="412.0">
               <columns>
                 <TableColumn fx:id="priceColumn" prefWidth="111.20001524686813" text="Price">
                     <cellValueFactory>
                         <PropertyValueFactory property="price" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="productColumn" minWidth="0.0" prefWidth="315.99998474121094" text="Product Name">
+                <TableColumn fx:id="productColumn" minWidth="0.0" prefWidth="400.0" text="Product Name">
                     <cellValueFactory>
                         <PropertyValueFactory property="productName" />
                     </cellValueFactory>
                 </TableColumn>
-                  <TableColumn fx:id="serialColumn" prefWidth="172.800048828125" text="Serial Number">
+                  <TableColumn fx:id="serialColumn" prefWidth="200.0" text="Serial Number">
                       <cellValueFactory>
                           <PropertyValueFactory property="serialNumber" />
                       </cellValueFactory>
@@ -55,6 +57,12 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TextField fx:id="searchField" layoutX="15.0" layoutY="40.0" prefHeight="26.0" prefWidth="434.0" promptText="Search Here" />
+      <TextField fx:id="searchField" layoutX="315.0" layoutY="40.0" prefHeight="26.0" prefWidth="434.0" promptText="Search Here" />
    </children>
+   <effect>
+      <SepiaTone level="0.1" />
+   </effect>
+   <padding>
+      <Insets bottom="30.0" />
+   </padding>
 </AnchorPane>

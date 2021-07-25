@@ -36,11 +36,14 @@ public class Item {
     }
 
     public void setSerialNumber(String serial) {
+        if( serial.length() != 10){
+            serialNumber.set("Serial is 10 Characters");
+        }
         //make sure serial number is only letters and numbers
-        if(Pattern.matches("^[a-zA-Z0-9]+$", serial)) {
+        else if(Pattern.matches("^[a-zA-Z0-9]+$", serial)) {
             serialNumber.set(serial);
         }else{
-            serialNumber.set("Alpha-Numeric Only");
+            serialNumber.set("AlphaNumeric Only");
         }
     }
 
