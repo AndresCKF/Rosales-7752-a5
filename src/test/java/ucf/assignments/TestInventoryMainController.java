@@ -28,17 +28,7 @@ import ucf.assignments.InventoryMainController;
  *  Copyright 2021 andres rosales
  */
 public class TestInventoryMainController {
-    /*@FXML TextField searchField;
-    @FXML
-    public TableView<Item> tableView;
-    public final ObservableList<Item> itemList = FXCollections.observableArrayList();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    searchField.setText("Andres");
-    System.out.println(searchField.getText());
-    }
-*/
     @Test//adds 100 items then saves to html, open in app to see it can display all 100 items correctly.
     public void add100Items(){
         LinkedList<Item> inventoryList = new LinkedList<Item>();
@@ -114,12 +104,19 @@ public class TestInventoryMainController {
         assertEquals(newSerial2, expected);
     }
 
-    /*@Test
+    @Test
     public void testDeleteListItem(){
         InventoryMainController controller = new InventoryMainController();
+        //add 2 items to list
         Item newItem = new Item("$44", "xbox controller", "abcd123");
+        Item newItem2 = new Item("$55", "headset", "xyz123");
         controller.addItem(newItem);
+        controller.addItem(newItem2);
+        //take 1 out
         controller.deleteListItem(newItem);
-        assert(controller.itemList.isEmpty());
-    }*/
+        // new size of list should be 1
+        assert(controller.itemList.size() == 1);
+    }
+    //The Sort product, sort serial numbers, sort price features are built into tableview
+    //Ability to edit each cell is also built into user interaction with tableview.
 }

@@ -62,10 +62,11 @@ public class InventoryMainController implements Initializable {
         String newSerial = checkSerialDuplicate(serialTextField.getText());
         //initialize new object Item
         addItem(new Item(priceTextField.getText(), newName, newSerial));
+        tableView.setItems(itemList);
+
     }
     public void addItem(Item newitem){
         itemList.add(newitem);
-        tableView.setItems(itemList);
 
     }
 
@@ -89,11 +90,11 @@ public class InventoryMainController implements Initializable {
     @FXML
     public void deleteClicked(ActionEvent event) {
         deleteListItem(tableView.getSelectionModel().getSelectedItem());
+        tableView.setItems(itemList);
     }
 
     public void deleteListItem(Item selectedItem) {
         itemList.remove(selectedItem);
-        tableView.setItems(itemList);
     }
 
     @FXML
