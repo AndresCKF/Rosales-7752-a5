@@ -1,5 +1,5 @@
 [
-  {"price":"25.5","productName": "Widget",  "serialNumber": "sdf" },
-  {"price": "15.5", "productName": "Thing",  "serialNumber": "v33434" },
-  {"price": "5.04", "productName": "Doodad",  "serialNumber": "gg545" }
+  {"price":"$25.5","productName": "Widget",  "serialNumber": "sdf" },
+  {"price": "$15.5", "productName": "Thing",  "serialNumber": "v33434" },
+  {"price": "$5.04", "productName": "Doodad",  "serialNumber": "gg545" }
 ]

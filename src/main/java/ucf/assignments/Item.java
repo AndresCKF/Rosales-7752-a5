@@ -17,7 +17,7 @@ public class Item {
     private final SimpleStringProperty productName = new SimpleStringProperty("");
     private final SimpleStringProperty serialNumber = new SimpleStringProperty("");
 
-    private static final LinkedList<String> ListSerialNumbers = new LinkedList<String>();
+    private static final LinkedList<String> ListSerialNumbers = new LinkedList<>();
     public Item(){
         this("","","");
     }

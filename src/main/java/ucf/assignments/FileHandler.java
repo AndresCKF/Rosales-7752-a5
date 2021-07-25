@@ -12,7 +12,6 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -20,6 +19,35 @@ import java.util.Scanner;
 public class FileHandler {
     public final static String header = "<!DOCTYPE html>\n<html>\n<body>\n<table>\n";
     public final static String footer = "</table>\n</body>\n</html>\n";
+
+    public static void saveJSON(ObservableList<Item> items, File file) {
+        System.out.println(items.size());
+        //convert observable list into a list of jsonItems that GSON can read
+        LinkedList<jsonItem> saveList = convertObserv2JSON(items);
+        System.out.println(saveList.size());
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(saveList);
+        System.out.println(jsonString);
+        try (FileWriter jsonWriter = new FileWriter(file)){
+            jsonWriter.write(jsonString);
+        }catch (IOException ex){
+            System.out.println("An error occurred writing to file.");
+            ex.printStackTrace();
+        }
+
+    }
+
+    private static LinkedList<jsonItem> convertObserv2JSON(ObservableList<Item> items) {
+        LinkedList<jsonItem> returnList = new LinkedList<>();
+        for(int i=0; i< items.size(); i++){
+            //interim jsonItem holder
+            jsonItem temp = new jsonItem(items.get(i).priceProperty().get(),
+                    items.get(i).productNameProperty().get(),
+                    items.get(i).serialNumberProperty().get());
+            returnList.add(temp);
+        }
+        return returnList;
+    }
 
     public static void saveTSV(List<Item> itemList, File file) {
         try(FileWriter tsvWriter = new FileWriter(file)){
@@ -107,25 +135,40 @@ public class FileHandler {
                 return items;
         }
     }
-    public static LinkedList<Item> loadJSON(String file) {
-        LinkedList<Item> loadItems = new LinkedList<>();
+    public static LinkedList<Item> loadJSON(String filePath) {
+        FileHandler handler = new FileHandler();
+        LinkedList<Item> returnItems = new LinkedList<>();
+        //retrieve list of json readable objects
+        LinkedList<jsonItem> loadjsonItems = handler.readJSON(filePath);
+        //convert into list<Item> to be read by main controller
+        for(int i=0; i< loadjsonItems.size(); i++){
+            Item newItem = new Item(loadjsonItems.get(i).price, loadjsonItems.get(i).productName, loadjsonItems.get(i).serialNumber);
+            returnItems.add(newItem);
+        }
+        return returnItems;
+    }
+
+
+
+    public LinkedList<jsonItem> readJSON(String filePath){
+        LinkedList<jsonItem> loadItems = new LinkedList<>();
         try {
-            Type listOfItemObject = new TypeToken<ArrayList<Item>>() {}.getType();
             // create Gson instance
             Gson gson = new Gson();
             // create a reader
-            Reader reader = Files.newBufferedReader(Paths.get(file));
-            // convert JSON array to list of users
-            loadItems = new Gson().fromJson(reader, listOfItemObject);
+            Reader reader = Files.newBufferedReader(Paths.get(filePath));
+            Type listOfObj = new TypeToken<LinkedList<jsonItem>>() {}.getType();
+            loadItems = new Gson().fromJson(reader, listOfObj);
             // close reader
             reader.close();
+
             return loadItems;
         } catch (Exception ex) {
             ex.printStackTrace();
             return loadItems;
         }
-
     }
+
     public static LinkedList<String> readLines(File file){
         //hold every line from file as an element in data
         LinkedList<String> data = new LinkedList<>();

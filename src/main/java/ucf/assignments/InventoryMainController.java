@@ -25,6 +25,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.*;
 
 public class InventoryMainController implements Initializable {
@@ -59,7 +60,7 @@ public class InventoryMainController implements Initializable {
         }
         //initialize new object Item
         itemList.add(new Item(priceTextField.getText(), newName, serialTextField.getText()));
-
+        tableView.setItems(itemList);
     }
 
     @FXML
@@ -85,11 +86,10 @@ public class InventoryMainController implements Initializable {
 
     private void loadInventoryList(File file) {
         if (file != null) {
-            //get file name and extension
+            //get file path and extension
             String fileName = file.getName();
             String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
-
-
+            String filePath = file.getAbsolutePath();
             //use file extension to call correct FileHandler method
             if (fileExtension.toLowerCase(Locale.ROOT).equals("tsv")) {
                 LinkedList<Item> loadedList = FileHandler.loadTSV(file);
@@ -107,9 +107,9 @@ public class InventoryMainController implements Initializable {
                 tableView.setItems(itemList);
 
             } else if (fileExtension.toLowerCase(Locale.ROOT).equals("json")) {
-                LinkedList<Item> loadedList = FileHandler.loadJSON(fileName);
+                LinkedList<Item> loadedList = FileHandler.loadJSON(filePath);
                 //clear old list
-                tableView.getItems().clear();
+                itemList.clear();
                 //load new list
                 itemList.addAll(loadedList);
                 tableView.setItems(itemList);
@@ -140,6 +140,8 @@ public class InventoryMainController implements Initializable {
                 FileHandler.saveTSV(tableView.getItems(), file);
             } else if (fileExtension.toLowerCase(Locale.ROOT).equals("html")) {
                 FileHandler.saveHTML(tableView.getItems(), file);
+            } else if (fileExtension.toLowerCase(Locale.ROOT).equals("json")) {
+                FileHandler.saveJSON(tableView.getItems(), file);
             }
 
         }
@@ -207,7 +209,6 @@ public class InventoryMainController implements Initializable {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
 
             // Wrap the FilteredList in a SortedList.
-            System.out.println(filteredData.size());
             SortedList<Item> sortedList = makeFilteredList(filteredData, newValue);
             // Bind the SortedList comparator to the TableView comparator.
             sortedList.comparatorProperty().bind(tableView.comparatorProperty());
@@ -217,7 +218,7 @@ public class InventoryMainController implements Initializable {
         });
         //End Search Listener
     }
-
+    //returns a sortedList with only items that contain a hit for searchField: newValue
     public static SortedList<Item> makeFilteredList(FilteredList<Item> filteredData, String newValue) {
         // Set the filter whenever the filter changes.
         filteredData.setPredicate(product -> {

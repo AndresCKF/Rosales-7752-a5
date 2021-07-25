@@ -29,6 +29,7 @@ class InventoryMainController{
 
     +loadListClick()
     +loadList()
+    +makeFilteredList
 
 }
 class Item{
