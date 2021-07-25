@@ -28,24 +28,33 @@ import java.net.URL;
 import java.util.*;
 
 public class InventoryMainController implements Initializable {
-    @FXML private TableView<Item> tableView;
-    @FXML private AnchorPane anchorPane;
-    @FXML private TableColumn priceColumn;
-    @FXML private TableColumn serialColumn;
-    @FXML private TableColumn productColumn;
-    @FXML private TextField priceTextField;
-    @FXML private TextField serialTextField;
-    @FXML private TextField productTextField;
-    @FXML private TextField searchField;
+    @FXML
+    private TableView<Item> tableView;
+    @FXML
+    private AnchorPane anchorPane;
+    @FXML
+    private TableColumn priceColumn;
+    @FXML
+    private TableColumn serialColumn;
+    @FXML
+    private TableColumn productColumn;
+    @FXML
+    private TextField priceTextField;
+    @FXML
+    private TextField serialTextField;
+    @FXML
+    private TextField productTextField;
+    @FXML
+    private TextField searchField;
     private final ObservableList<Item> itemList = FXCollections.observableArrayList();
 
     @FXML
-    public void addItemButton(javafx.event.ActionEvent actionEvent){
+    public void addItemButton(javafx.event.ActionEvent actionEvent) {
         //cut description field to 256 characters
         String newName;
-        if(productTextField.getText().length() > 256) {
+        if (productTextField.getText().length() > 256) {
             newName = productTextField.getText().substring(0, 256);
-        }else{
+        } else {
             newName = productTextField.getText();
         }
         //initialize new object Item
@@ -54,7 +63,7 @@ public class InventoryMainController implements Initializable {
     }
 
     @FXML
-    public void deleteClicked(ActionEvent event){
+    public void deleteClicked(ActionEvent event) {
         deleteListItem();
     }
 
@@ -76,33 +85,36 @@ public class InventoryMainController implements Initializable {
 
     private void loadInventoryList(File file) {
         if (file != null) {
-                //get file name and extension
-                String fileName = file.getName();
-                String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
+            //get file name and extension
+            String fileName = file.getName();
+            String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
 
 
-                //use file extension to call correct FileHandler method
-                if(fileExtension.toLowerCase(Locale.ROOT).equals("tsv")){
-                    LinkedList<Item> loadedList = FileHandler.loadTSV(file);
-                    //clear old list
-                    tableView.getItems().clear();
-                    //load new list
-                    itemList.addAll(loadedList);
+            //use file extension to call correct FileHandler method
+            if (fileExtension.toLowerCase(Locale.ROOT).equals("tsv")) {
+                LinkedList<Item> loadedList = FileHandler.loadTSV(file);
+                //clear old list
+                itemList.clear();
+                //load new list
+                itemList.addAll(loadedList);
+                tableView.setItems(itemList);
+            } else if (fileExtension.toLowerCase(Locale.ROOT).equals("html")) {
+                LinkedList<Item> loadedList = FileHandler.loadHTML(file);
+                //clear old list
+                itemList.clear();
+                //load new list
+                itemList.addAll(loadedList);
+                tableView.setItems(itemList);
 
-                }else if(fileExtension.toLowerCase(Locale.ROOT).equals("html")){
-                    LinkedList<Item> loadedList = FileHandler.loadHTML(file);
-                    //clear old list
-                    tableView.getItems().clear();
-                    //load new list
-                    itemList.addAll(loadedList);
+            } else if (fileExtension.toLowerCase(Locale.ROOT).equals("json")) {
+                LinkedList<Item> loadedList = FileHandler.loadJSON(fileName);
+                //clear old list
+                tableView.getItems().clear();
+                //load new list
+                itemList.addAll(loadedList);
+                tableView.setItems(itemList);
 
-                }else if(fileExtension.toLowerCase(Locale.ROOT).equals("json")){
-                    LinkedList<Item> loadedList = FileHandler.loadJSON(fileName);
-                    //clear old list
-                    tableView.getItems().clear();
-                    //load new list
-                    itemList.addAll(loadedList);
-                }
+            }
         }
     }
 
@@ -116,16 +128,17 @@ public class InventoryMainController implements Initializable {
         //pass user selected file to save function
         saveInventoryList(file);
     }
-    public void saveInventoryList(File file){
+
+    public void saveInventoryList(File file) {
         //get file name
         //get file extension
         //pass file and working list to correct FileHandler function.
         if (file != null) {
             String fileName = file.getName();
             String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, file.getName().length());
-            if(fileExtension.toLowerCase(Locale.ROOT).equals("tsv")){
+            if (fileExtension.toLowerCase(Locale.ROOT).equals("tsv")) {
                 FileHandler.saveTSV(tableView.getItems(), file);
-            }else if(fileExtension.toLowerCase(Locale.ROOT).equals("html")){
+            } else if (fileExtension.toLowerCase(Locale.ROOT).equals("html")) {
                 FileHandler.saveHTML(tableView.getItems(), file);
             }
 
@@ -144,84 +157,87 @@ public class InventoryMainController implements Initializable {
                 new FileChooser.ExtensionFilter("JSON", "*.json")
         );
     }
-        @Override
-        public void initialize(URL location, ResourceBundle resources){
 
-            //make price column editable
-            priceColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-            priceColumn.setOnEditCommit(
-                    new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-                        @Override
-                        public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                            ((Item) event.getTableView().getItems().get(
-                                    event.getTablePosition().getRow())
-                            ).setPrice(event.getNewValue());
-                            tableView.refresh();
-                        }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        //make price column editable
+        priceColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        priceColumn.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Item, String> event) {
+                        ((Item) event.getTableView().getItems().get(
+                                event.getTablePosition().getRow())
+                        ).setPrice(event.getNewValue());
+                        tableView.refresh();
                     }
-            );
-            //make serial number column editable
-            serialColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-            serialColumn.setOnEditCommit(
-                    new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-                        @Override
-                        public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                            ((Item) event.getTableView().getItems().get(
-                                    event.getTablePosition().getRow())
-                            ).setSerialNumber(event.getNewValue());
-                            tableView.refresh();
-                        }
+                }
+        );
+        //make serial number column editable
+        serialColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        serialColumn.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Item, String> event) {
+                        ((Item) event.getTableView().getItems().get(
+                                event.getTablePosition().getRow())
+                        ).setSerialNumber(event.getNewValue());
+                        tableView.refresh();
                     }
-            );
-            //make product name column editable
-            productColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-            productColumn.setOnEditCommit(
-                    new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-                        @Override
-                        public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                            ((Item) event.getTableView().getItems().get(
-                                    event.getTablePosition().getRow())
-                            ).setProductName(event.getNewValue());
-                        }
+                }
+        );
+        //make product name column editable
+        productColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        productColumn.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Item, String> event) {
+                        ((Item) event.getTableView().getItems().get(
+                                event.getTablePosition().getRow())
+                        ).setProductName(event.getNewValue());
                     }
-            );
+                }
+        );
 
-            // Create Search Listener
-            //first wrap itemList in filtered List
-            FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
 
-            // Set the filter whenever the filter changes.
-            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-                filteredData.setPredicate(product -> {
-                    // If filter text is empty, display all persons.
-
-                    if (newValue == null || newValue.isEmpty()) {
-                        return true;
-                    }
-
-                    // Compare price, productname, serialnumber, with filter text.
-                    String lowerCaseFilter = newValue.toLowerCase();
-
-                    if (product.priceProperty().get().toLowerCase().contains(lowerCaseFilter)) {
-                        return true; // Search matches price.
-                    } else if (product.productNameProperty().get().toLowerCase().contains(lowerCaseFilter)) {
-                        return true; // Search matches product name.
-                    }
-                    else if (product.serialNumberProperty().get().contains(lowerCaseFilter))
-                        return true; // Search matches serial number
-                    else
-                        return false; // Does not match.
-                });
-            });
+        // Create Search Listener
+        //first wrap itemList in filtered List
+        FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
 
             // Wrap the FilteredList in a SortedList.
-            SortedList<Item> sortedData = new SortedList<>(filteredData);
-
+            System.out.println(filteredData.size());
+            SortedList<Item> sortedList = makeFilteredList(filteredData, newValue);
             // Bind the SortedList comparator to the TableView comparator.
-            sortedData.comparatorProperty().bind(tableView.comparatorProperty());
+            sortedList.comparatorProperty().bind(tableView.comparatorProperty());
+            // Add sorted (and filtered) data to the table.
+            tableView.setItems(sortedList);
+            System.out.println(newValue);
+        });
+        //End Search Listener
+    }
 
-            // 5. Add sorted (and filtered) data to the table.
-            tableView.setItems(sortedData);
-            //End Search Listener
-        }
+    public static SortedList<Item> makeFilteredList(FilteredList<Item> filteredData, String newValue) {
+        // Set the filter whenever the filter changes.
+        filteredData.setPredicate(product -> {
+            // If filter text is empty, display all persons.
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
+            // Compare price, productname, serialnumber, with filter text.
+            String lowerCaseFilter = newValue.toLowerCase();
+
+            if (product.priceProperty().get().toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Search matches price.
+            } else if (product.productNameProperty().get().toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Search matches product name.
+            } else if (product.serialNumberProperty().get().contains(lowerCaseFilter)) {
+                return true; // Search matches serial number
+            } else {
+                return false; // Does not match.
+            }
+        });
+        return new SortedList<>(filteredData);
+    }
 }

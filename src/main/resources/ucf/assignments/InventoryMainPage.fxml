@@ -53,11 +53,6 @@
               <MenuItem mnemonicParsing="false" onAction="#deleteClicked" text="Delete" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
         </menus>
       </MenuBar>
       <TextField fx:id="searchField" layoutX="15.0" layoutY="40.0" prefHeight="26.0" prefWidth="434.0" promptText="Search Here" />

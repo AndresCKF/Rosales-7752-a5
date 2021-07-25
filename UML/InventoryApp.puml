@@ -4,32 +4,38 @@ class InventoryApp{
     start()
 }
 class FileHandler{
-    +createFile()
 
     +saveTSV()
     +saveHTML()
+    +saveJSON()
 
     +loadTSV()
     +loadHTML()
+    +loadJSON()
+
+    +readLines()
 }
 class InventoryMainController{
     +initialize()
 
-    +configureFileChooser()
-    +saveInventoryListClick()
-    +saveInventoryList()
-    +loadListClick()
-    +loadList()
-
+    +addItem()
     +deleteClicked
     +deleteListItem
 
+    +configureFileChooser()
+
+    +saveInventoryListClick()
+    +saveInventoryList()
+
+    +loadListClick()
+    +loadList()
 
 }
 class Item{
-    +SimpleStringProperty price
-    +SimpleStringProperty name
-    +SimpleStringProperty serialNumber
+    -SimpleStringProperty price
+    -SimpleStringProperty name
+    -SimpleStringProperty serialNumber
+    -LinkedList<String> listSerialNumbers
 
     +priceProperty()
     +productNameProperty()
@@ -38,6 +44,10 @@ class Item{
     +setPrice()
     +setSerialNumber()
     +setProductName()
+
+    +equals()    @Override
+    +hashcode()     @Override
+
 }
 InventoryApp -- InventoryMainController
 InventoryMainController -- FileHandler
