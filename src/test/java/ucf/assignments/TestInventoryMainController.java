@@ -31,18 +31,30 @@ public class TestInventoryMainController {
 
     @Test//adds 100 items then saves to html, open in app to see it can display all 100 items correctly.
     public void add100Items(){
-        LinkedList<Item> inventoryList = new LinkedList<Item>();
         Item testItem = new Item("$45.67","Chrysler SUV", "AsdfdsfASa334");
+        InventoryMainController controller = new InventoryMainController();
 
         for(int i=0; i<100; i++){
-            inventoryList.add(new Item("$" + i,"Chrysler SUV", "AsdfdsfASa334" + i));
+            controller.addItem(new Item("$" + i,"Chrysler SUV", "AsdfdsfASa334" + i));
         }
-        assert(inventoryList.size() == 100);
+        assert(controller.itemList.size() == 100);
         //outputs 100 item list to check how it looks when opened in app
         File file = new File("./src/test/resources/add100Items.html");
-        FileHandler.saveHTML(inventoryList,file);
+        FileHandler.saveHTML(controller.itemList,file);
     }
-
+    @Test
+    public void testDeleteListItem(){
+        InventoryMainController controller = new InventoryMainController();
+        //add 2 items to list
+        Item newItem = new Item("$44", "xbox controller", "abcd123");
+        Item newItem2 = new Item("$55", "headset", "xyz123");
+        controller.addItem(newItem);
+        controller.addItem(newItem2);
+        //take 1 out
+        controller.deleteListItem(newItem);
+        // new size of list should be 1
+        assert(controller.itemList.size() == 1);
+    }
     @Test
     public void testSearchByName(){
         //create new item list with 4 items
@@ -92,7 +104,6 @@ public class TestInventoryMainController {
         //new sorted list should not contain 2 items
         assertNotEquals(sortedList.size(), 2);
     }
-
     @Test
     public void testDuplicateSerial(){
         InventoryMainController controller = new InventoryMainController();
@@ -104,19 +115,6 @@ public class TestInventoryMainController {
         assertEquals(newSerial2, expected);
     }
 
-    @Test
-    public void testDeleteListItem(){
-        InventoryMainController controller = new InventoryMainController();
-        //add 2 items to list
-        Item newItem = new Item("$44", "xbox controller", "abcd123");
-        Item newItem2 = new Item("$55", "headset", "xyz123");
-        controller.addItem(newItem);
-        controller.addItem(newItem2);
-        //take 1 out
-        controller.deleteListItem(newItem);
-        // new size of list should be 1
-        assert(controller.itemList.size() == 1);
-    }
     //The Sort product, sort serial numbers, sort price features are built into tableview
     //Ability to edit each cell is also built into user interaction with tableview.
 }
