@@ -262,7 +262,7 @@ public class InventoryMainController implements Initializable {
                 return true; // Search matches price.
             } else if (product.productNameProperty().get().toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Search matches product name.
-            } else if (product.serialNumberProperty().get().contains(lowerCaseFilter)) {
+            } else if (product.serialNumberProperty().get().toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Search matches serial number
             } else {
                 return false; // Does not match.

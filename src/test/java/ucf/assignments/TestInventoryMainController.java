@@ -91,18 +91,19 @@ public class TestInventoryMainController {
 
         assertIterableEquals(sortedList, expected);
     }
+    //tests that search works simultaneously on product name and serial numbers, and different letter cases
     @Test
     public void testFalseMakeFilteredList(){
         ObservableList<Item> itemList = FXCollections.observableArrayList();
         itemList.add(new Item("$33.44","Andres","sdfsttr3443434"));
-        itemList.add(new Item("$33.44","Bob","sdfsdfaw3434"));
+        itemList.add(new Item("$33.44","Bob","sfANDRES44"));
         itemList.add(new Item("$33.44","Charlie","sdfsdfjjjj434"));
         itemList.add(new Item("$33.44","Dick","sdfggg43434"));
 
         FilteredList<Item> filteredData = new FilteredList<>(itemList, b -> true);
         SortedList<Item> sortedList = InventoryMainController.makeFilteredList(filteredData, "Andres");
         //new sorted list should not contain 2 items
-        assertNotEquals(sortedList.size(), 2);
+        assertEquals(sortedList.size(), 2);
     }
     @Test
     public void testDuplicateSerial(){
